@@ -3,10 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Surfside Painting Company — residential and commercial painting with meticulous prep and durable finishes." />
   <title>Surfside Painting Company</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
   <header class="site-header">
     <!-- Top contact strip -->
     <div class="topbar">
@@ -42,7 +45,7 @@
     </nav>
   </header> 
   <!-- Hero -->
-  <main>
+  <main id="main">
     <section class="hero" role="region" aria-label="Hero">
       <div class="hero-overlay">
         <div class="hero-content container">
@@ -89,24 +92,45 @@
     // Small script for nav toggle and dynamic year
     (function () {
       const toggle = document.querySelector('.nav-toggle');
-      const nav = document.getElementById('primary-navigation');
+      const nav = document.getElementById('primary-menu'); // fixed: select the actual id used in markup
+      const YEAR_ID = 'year';
 
-      toggle.addEventListener('click', function () {
-        const expanded = this.getAttribute('aria-expanded') === 'true';
-        this.setAttribute('aria-expanded', String(!expanded));
-        nav.classList.toggle('nav-open');
-      });
+      if (toggle && nav) {
+        // Toggle menu
+        toggle.addEventListener('click', function () {
+          const expanded = this.getAttribute('aria-expanded') === 'true';
+          this.setAttribute('aria-expanded', String(!expanded));
 
-      // Close nav when a link is clicked (mobile)
-      nav.addEventListener('click', (e) => {
-        if (e.target.tagName === 'A' && window.innerWidth < 900) {
-          nav.classList.remove('nav-open');
-          toggle.setAttribute('aria-expanded', 'false');
-        }
-      });
+          const isOpen = nav.getAttribute('data-open') === 'true';
+          nav.setAttribute('data-open', String(!isOpen));
+          nav.classList.toggle('nav-open');
+        });
 
-      // current year
-      document.getElementById('year').textContent = new Date().getFullYear();
+        // Close nav when a link is clicked (mobile)
+        nav.addEventListener('click', (e) => {
+          if (e.target && e.target.tagName === 'A' && window.innerWidth < 900) {
+            nav.classList.remove('nav-open');
+            nav.setAttribute('data-open', 'false');
+            toggle.setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        // Close nav on Escape
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && nav.classList.contains('nav-open')) {
+            nav.classList.remove('nav-open');
+            nav.setAttribute('data-open', 'false');
+            toggle.setAttribute('aria-expanded', 'false');
+            toggle.focus();
+          }
+        });
+      }
+
+      // current year (defensive)
+      const yearEl = document.getElementById(YEAR_ID);
+      if (yearEl) {
+        yearEl.textContent = new Date().getFullYear();
+      }
     })();
   </script>
 </body>
