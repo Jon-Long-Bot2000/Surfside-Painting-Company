@@ -1,4 +1,5 @@
 :root{
+ @import "components/navbar.css
   --nav-height: 68px;
   --topbar-height: 34px;
   --accent: #0b84ff;
